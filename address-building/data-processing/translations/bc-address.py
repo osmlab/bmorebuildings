@@ -54,16 +54,38 @@ def translateType(stType):
     return stTypeExpanded
 
 def caseStreetName(stName):
+    import re
 
+    # capitalize each word that is separated by a space
     address = stName
     stNameCased = ' '.join([word.capitalize() for word in address.split()])
+
+    # special names that need to be replaced
+    rep = {"O'donnell": "O'Donnell", "Mcallister": "McAllister",
+        "Mccabe": "McCabe", "Mcclean": "McClean",
+        "Mccollough": "McCollough", "Mccomas": "McComas",
+        "Mcculloh": "McCulloh", "Mccurley": "McCurley",
+        "Mcdonogh": "McDonogh", "Mcelderry": "McElderry",
+        "Mchenry": "McHenry", "Mckay": "McKay",
+        "Mckean": "McKean", "Mckendree": "McKendree",
+        "Mckewin": "McKewin", "Mcmechen": "McMechen",
+        "Mcphail": "McPhail", "Mcteague": "McTeague",
+        "St.": "Saint", "St Paul": "Saint Paul",
+        "St Matthews": "Saint Matthews"}
+
+    # replace any of the rep names above
+    # code source from http://stackoverflow.com/a/6117124/2105596
+    rep = dict((re.escape(k), v) for k, v in rep.iteritems())
+    pattern = re.compile("|".join(rep.keys()))
+    stNameCased = pattern.sub(lambda m: rep[re.escape(m.group(0))], stNameCased)
 
     return stNameCased
 
 def translateDirection(dirAbbr):
     suffixlookup = {}
 
-    # Directions
+    # Directionals that need to be expanded. The code replaces the
+    # item before the colon with the one after.
 
     suffixlookup.update({'E':'East'})
     suffixlookup.update({'S':'South'})
@@ -81,31 +103,32 @@ def filterTags(attrs):
 
     tags = {}
 
-    #automagically convert names
+    # clear vars
     x = ''
     y = ''
 
-    if 'st_name' in attrs and attrs['st_name']:
+    # convert names if there is a name
+    if attrs['ST_NAME']:
         tags.update({'addr:street':' '.join([x for x in (
-            translateDirection(attrs['st_dir']),
-            caseStreetName(attrs['st_name']),
-            translateType(attrs['st_type'])
+            translateDirection(attrs['ST_DIR']),
+            caseStreetName(attrs['ST_NAME']),
+            translateType(attrs['ST_TYPE'])
             ) if x])
         })
         tags.update({'addr:city':'Baltimore'})
         tags.update({'addr:state':'MD'})
         tags.update({'addr:country':'US'})
 
-    if 'addr_numbe' in attrs and attrs['addr_numbe'] and attrs['addr_numbe'] != '0':
+    # if the address number isn't zero, compile the number
+    # TODO: need to look into this fractional bit
+    if attrs['ADDR_NUMBE'] != '0':
        tags.update({'addr:housenumber':' '.join([y for y in (
-            attrs['addr_numbe'],
-            attrs['addr_frac']) if y])
+            attrs['ADDR_NUMBE'],
+            attrs['ADDR_FRAC']) if y])
             })
 
-    if 'zip_code' in attrs and attrs['zip_code']:
-        tags.update({'addr:postcode':attrs['zip_code']})
-    
-    if 'id' in attrs:
-        tags.update({'building': 'yes'})
+    # convert zipcode
+    if attrs['ZIP_CODE']:
+        tags.update({'addr:postcode':attrs['ZIP_CODE']})
 
     return tags
