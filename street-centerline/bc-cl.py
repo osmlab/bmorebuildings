@@ -114,7 +114,7 @@ def filterTags(attrs):
     tags.update({'addr:block':attrs['BLOCK_NUM']})
 
     # street name translations
-    tags.update({'addr:street':' '.join([x for x in (
+    tags.update({'name':' '.join([x for x in (
         translateDirection(attrs['DIRPRE']),
         caseStreetName(attrs['FEANME']),
         translateType(attrs['FEATYPE']),
