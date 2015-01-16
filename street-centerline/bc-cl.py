@@ -111,7 +111,7 @@ def filterTags(attrs):
     tags.update({'addr:city':'Baltimore'})
     tags.update({'addr:state':'MD'})
     tags.update({'addr:country':'US'})
-    tags.update({'addr:block':attrs['BLOCK_NUM']})
+    tags.update({'note:blocknumber':attrs['BLOCK_NUM']})
 
     # street name translations
     tags.update({'name':' '.join([x for x in (
@@ -129,24 +129,24 @@ def filterTags(attrs):
             tags.update({'highway':'service'})
             tags.update({'service':'alley'})
         elif attrs['SUBTYPE'] == "STREX": # expressway
-            if attrs['SHA_CLASS'] == "FWY":
+            if attrs['SHA_CLASS'] == "FWY": # freeway
                 tags.update({'highway':'trunk'})
-            elif attrs['SHA_CLASS'] == "INT":
+            elif attrs['SHA_CLASS'] == "INT": # interstate
                 tags.update({'highway':'motorway'})
-            elif attrs['SHA_CLASS'] == "PART":
+            elif attrs['SHA_CLASS'] == "PART": # primary arterial
                 tags.update({'highway':'primary'})
         elif attrs['SUBTYPE'] == "STRFIC": # not sure what 'fic' is, but these are mostly ped streets
             tags.update({'highway':'pedestrian'})
         elif attrs['SUBTYPE'] == "STRNDR": # 'ndr' is probably non-drivable
             tags.update({'highway':'path'})
         elif attrs['SUBTYPE'] == "STRPRD": # regular roads
-            if attrs['SHA_CLASS'] == "LOC":
+            if attrs['SHA_CLASS'] == "LOC": # local
                 tags.update({'highway':'unclassified'})
-            elif attrs['SHA_CLASS'] == "MART":
+            elif attrs['SHA_CLASS'] == "MART": # minor arterial
                 tags.update({'highway':'secondary'})
-            elif attrs['SHA_CLASS'] == "PART":
+            elif attrs['SHA_CLASS'] == "PART": # primary arterial
                 tags.update({'highway':'primary'})
-            elif attrs['SHA_CLASS'] == "COLL":
+            elif attrs['SHA_CLASS'] == "COLL": # collector
                 tags.update({'highway':'tertiary'})
             else:
                 tags.update({'highway':'residential'})
@@ -161,8 +161,6 @@ def filterTags(attrs):
                 tags.update({'highway':'primary_link'})
             if attrs['SHA_CLASS'] == "INT":
                 tags.update({'highway':'motorway_link'})
-            else:
-                tags.update({'highway':'road_link'}) # not a real link type
         elif attrs['SUBTYPE'] == "STRURB": # seems to be tracks
             tags.update({'highway':'track'})
         else:
