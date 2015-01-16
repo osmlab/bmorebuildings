@@ -163,6 +163,12 @@ def filterTags(attrs):
                 tags.update({'highway':'motorway_link'})
         elif attrs['SUBTYPE'] == "STRURB": # seems to be tracks
             tags.update({'highway':'track'})
+        elif attrs['SUBTYPE'] == "STRTN": # tunnels
+            tags.update({'highway':'motorway'})
+            tags.update({'tunnel':'yes'})
+        elif attrs['SUBTYPE'] == "STCLN": # county roads
+            tags.update({'note':'County Road'})
+            tags.update({'highway':'road'})
         else:
             tags.update({'highway':'road'})
 
