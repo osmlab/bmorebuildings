@@ -135,11 +135,11 @@ def filterTags(attrs):
                 tags.update({'highway':'motorway'})
             elif attrs['SHA_CLASS'] == "PART": # primary arterial
                 tags.update({'highway':'primary'})
-        elif attrs['SUBTYPE'] == "STRFIC": # not sure what 'fic' is, but these are mostly ped streets
+        elif attrs['SUBTYPE'] == "STRFIC": # fictious streets 
             tags.update({'highway':'pedestrian'})
         elif attrs['SUBTYPE'] == "STRNDR": # 'ndr' is probably non-drivable
             tags.update({'highway':'path'})
-        elif attrs['SUBTYPE'] == "STRPRD": # regular roads
+        elif attrs['SUBTYPE'] == "STRPRD": # paved roads
             if attrs['SHA_CLASS'] == "LOC": # local
                 tags.update({'highway':'unclassified'})
             elif attrs['SHA_CLASS'] == "MART": # minor arterial
