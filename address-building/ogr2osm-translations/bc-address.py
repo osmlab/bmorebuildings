@@ -70,6 +70,8 @@ def caseStreetName(stName):
         "Mckean": "McKean", "Mckendree": "McKendree",
         "Mckewin": "McKewin", "Mcmechen": "McMechen",
         "Mcphail": "McPhail", "Mcteague": "McTeague",
+        "Macbeth": "MacBeth", "MacTavish": "MacTavish",
+        "Lasalle": "LaSalle",
         "St.": "Saint", "St Paul": "Saint Paul",
         "St Matthews": "Saint Matthews"}
 
