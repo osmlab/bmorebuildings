@@ -70,6 +70,8 @@ def caseStreetName(stName):
         "Mckean": "McKean", "Mckendree": "McKendree",
         "Mckewin": "McKewin", "Mcmechen": "McMechen",
         "Mcphail": "McPhail", "Mcteague": "McTeague",
+        "Macbeth": "MacBeth", "MacTavish": "MacTavish",
+        "Lasalle": "LaSalle",
         "St.": "Saint", "St Paul": "Saint Paul",
         "St Matthews": "Saint Matthews"}
 
@@ -108,11 +110,11 @@ def filterTags(attrs):
     y = ''
 
     # convert names if there is a name
-    if attrs['ST_NAME']:
+    if 'st_name' in attrs and attrs['st_name']:
         tags.update({'addr:street':' '.join([x for x in (
-            translateDirection(attrs['ST_DIR']),
-            caseStreetName(attrs['ST_NAME']),
-            translateType(attrs['ST_TYPE'])
+            translateDirection(attrs['st_dir']),
+            caseStreetName(attrs['st_name']),
+            translateType(attrs['st_type'])
             ) if x])
         })
         tags.update({'addr:city':'Baltimore'})
@@ -121,14 +123,18 @@ def filterTags(attrs):
 
     # if the address number isn't zero, compile the number
     # TODO: need to look into this fractional bit
-    if attrs['ADDR_NUMBE'] != '0':
+    if 'addr_numbe' in attrs and attrs['addr_numbe'] and attrs['addr_numbe'] != '0':
        tags.update({'addr:housenumber':' '.join([y for y in (
-            attrs['ADDR_NUMBE'],
-            attrs['ADDR_FRAC']) if y])
+            attrs['addr_numbe'],
+            attrs['addr_frac']) if y])
             })
 
     # convert zipcode
-    if attrs['ZIP_CODE']:
-        tags.update({'addr:postcode':attrs['ZIP_CODE']})
+    if 'zip_code' in attrs and attrs['zip_code']:
+        tags.update({'addr:postcode':attrs['zip_code']})
+    
+    # buildings
+    if 'id' in attrs:
+        tags.update({'building': 'yes'})
 
     return tags
