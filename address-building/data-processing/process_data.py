@@ -7,11 +7,13 @@
 # Domain Dedication: https://creativecommons.org/publicdomain/zero/1.0/
 #
 # Expects source data in source_data folder
+#   - building.shp
+#   - AddressJoinFeb2015.shp
+#   - maryland-latest.osm.pbf
 #
 # Expects a PostGIS database named "baltimore" to be accessible by the
 # executing user: e.g. run the following as the postgres user
-#   $ psql -c "create database baltimore"
-#   $ psql -c "alter database baltimore owner to USERNAME"
+#   $ createdb -O USERNAME baltimore
 #   $ psql -d baltimore -c "create extension postgis"
 #
 # Tested under Linux Mint 17.1
@@ -27,7 +29,7 @@ import subprocess
 
 print 'Importing data...'
 os.system('shp2pgsql -s 2248 source_data/building.shp buildings | psql -d baltimore')
-os.system('shp2pgsql -I -s 2248 source_data/AddressPoint_BaltCity.shp raw_addresses | psql -d baltimore')
+os.system('shp2pgsql -I -s 2248 source_data/AddressJoinFeb2015.shp raw_addresses | psql -d baltimore')
 os.system('osm2pgsql -d baltimore source_data/maryland-latest.osm.pbf')
 p = subprocess.Popen('psql -d baltimore < cleanGeometry.sql', 
                      stdin=subprocess.PIPE, stdout=subprocess.PIPE, shell=True)
