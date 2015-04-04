@@ -34,6 +34,7 @@ def translateType(stType):
     suffixlookup.update({'PASS':'Pass'})
     suffixlookup.update({'PATH':'Path'})
     suffixlookup.update({'PIKE':'Pike'})
+    suffixlookup.update({'PKWY':'Parkway'})
     suffixlookup.update({'PL':'Place'})
     suffixlookup.update({'PLZ':'Plaza'})
     suffixlookup.update({'PT':'Point'})
